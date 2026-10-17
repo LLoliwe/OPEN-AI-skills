@@ -18,8 +18,8 @@ Issue: https://linear.app/pryntor/issue/PRY-224
 
 ## Offline preflight
 - Python 3.13.5 local run from authored source: original `test_catalog.py` 12/12 passed, independent separately authored adversarial `test_independent.py` 12/12 passed; `python -m unittest discover -v -p 'test_*.py'` **24/24 passed**.
-- Original source SHA-256: catalog `fe2f218a849b4016aa7a9dc289b5ed389fde285a04cffd2890e68e8f13dab492`, original tests `5bc80150c276211714a981b2a576990b31b3f0262e9841be37f69a9ceb22c92f`; independent suite `ebf78950e71aa7fb524b22400831712f681a432360de52e003542c82cfef1484` (compare committed byte content before asserting exact match).
-- Hosted CI run for preceding head: https://github.com/LLoliwe/OPEN-AI-skills/actions/runs/39013364791 passed. **New head must independently pass CI**; do not borrow prior-head status.
+- Verified committed SHA-256: catalog `129937a57be8a6ccdc2317c2067fcae45b3a17e7312b0c6df1dab35beede36ec` (Git blob `ee1a1836dc95eb7cdd6c1cab3ff1fa2923448ec6`; the local prototype was 5 bytes larger with SHA-256 `fe2f218a849b4016aa7a9dc289b5ed389fde285a04cffd2890e68e8f13dab492`; GitHub CI tests committed source), original tests `5bc80150c276211714a981b2a576990b31b3f0262e9841be37f69a9ceb22c92f`; independent suite `ebf78950e71aa7fb524b22400831712f681a432360de52e003542c82cfef1484` (compare committed byte content before asserting exact match).
+- Hosted CI prior review head https://github.com/LLoliwe/OPEN-AI-skills/actions/runs/39013364791 PASSED; 24-test review head https://github.com/LLoliwe/OPEN-AI-skills/actions/runs/39013737518 PASSED. After any later commit, confirm the exact latest-head CI again.
 
 ## Acceptance scope and holds
 - Research skill and public source triage only; NOT production agent/runtime installation, scientific validation, speaker admission, commercial dataset licence or venture production.
