@@ -1,0 +1,34 @@
+name: Source Vault project skill preflight
+on:
+  pull_request:
+    paths:
+      - '.agents/skills/pryntor-source-vault/**'
+      - '.claude/skills/pryntor-source-vault/**'
+      - 'AGENTS.md'
+      - '.github/workflows/pryntor-source-vault.yml'
+permissions:
+  contents: read
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify both agent routers and explicit boundaries
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          codex = Path(".agents/skills/pryntor-source-vault/SKILL.md").read_text()
+          claude = Path(".claude/skills/pryntor-source-vault/SKILL.md").read_text()
+          agents = Path("AGENTS.md").read_text()
+          for body in (codex, claude):
+              assert "pryntor-source-vault" in body
+              assert "COMPANY_ADOPTION.md" in body
+              assert "no account" in body.lower()
+              assert "public" in body.lower()
+              assert "not a runtime installation" in body.lower()
+          assert "Source Vault" in agents
+          assert "PRY-281" in agents
+          print("Read-only venture router preflight PASS")
+          PY
