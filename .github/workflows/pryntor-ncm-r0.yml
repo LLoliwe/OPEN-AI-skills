@@ -1,0 +1,19 @@
+name: Pryntor NCM R0 evidence gate
+on:
+  pull_request:
+    paths:
+      - 'skills/.experimental/pryntor-ncm-research/**'
+      - '.github/workflows/pryntor-ncm-r0.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-structural-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Python standard library syntax and adversarial unit tests
+        run: |
+          python3 -m py_compile skills/.experimental/pryntor-ncm-research/gate.py
+          python3 -m unittest discover -s skills/.experimental/pryntor-ncm-research -p 'test_gate.py' -v
