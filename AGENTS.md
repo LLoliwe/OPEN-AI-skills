@@ -15,3 +15,8 @@ When a task benefits from an interactive, physically grounded SVG, WebGL, or exp
 - **Optional, not a runtime dependency.** Do not install or execute remote code automatically on ordinary startup, overwrite an existing agent skill, add GPU spend, or publish designs to third-party galleries. Pin and inspect the source and confirm installed SHA.
 - For prototypes: match motion, labels and numerical outputs to an independently testable model; check desktop/mobile, keyboard, reduced motion, contrast, accessibility and actual screenshots. 3D renders are **not** validated engineering, safety, or physics simulations.
 - Triage by project relevance; protect customer, merchant, learner and company-private data. No claim of deployment, test pass, customer adoption or revenue without evidence.
+
+
+## Optional Pryntor REA — lawful source analysis
+
+The Pryntor REA routing skill is registered project-locally for Codex at `.agents/skills/pryntor-rea/SKILL.md` and for Claude at `.claude/skills/pryntor-rea/SKILL.md`. It is **optional** and does not automatically install MCP on any host. Follow the central pinned security/permissions runbook and prove every persistent installation independently. Do not expose real REA tool calls publicly, send customer code to the fixture lab, or claim independent review. Physical AC operation is NOT APPLICABLE. Canonical status PRY-232 and opt-in customer preview at https://pryntor-inspect.onrender.com (browser-local heuristics only).
