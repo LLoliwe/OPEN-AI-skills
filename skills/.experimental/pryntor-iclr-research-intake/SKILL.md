@@ -10,7 +10,7 @@ Use this skill only for public, non-sensitive research discovery across Pryntor'
 ## Sources
 - Primary authority: https://openreview.net/group?id=ICLR.cc/2027/Conference
 - First public snapshot indexed by this R0 tool: https://github.com/yzc-666/iclr2027-explorer
-- Expected upstream format: \`docs/data/meta.json\` plus \`docs/data/papers.json\` on upstream branch \`cursor/openreview-fetch-scripts\`.
+- Expected upstream format: `docs/data/meta.json` plus `docs/data/papers.json` on upstream branch `cursor/openreview-fetch-scripts`.
 - Upstream metadata dated 2026-10-07 reports 43,013 rows: 42,378 active, 216 withdrawn, 419 desk rejected, 17 topic groups and 171 tags. Verify a local copy, timestamps and digests before claiming your own snapshot. Original repository did not expose a licence file in the root at intake; do NOT assume it licenses wholesale republication of code or full articles.
 - OpenReview's CC0 metadata declaration does not mean the text of every submitted paper is CC0: https://openreview.net/legal/terms
 - Separate Leon (@iamleonli) citation rankings screenshot is an UNREPLICATED claim. Never blend it into this metadata-derived output.
@@ -18,15 +18,15 @@ Use this skill only for public, non-sensitive research discovery across Pryntor'
 ## Local usage
 No dependencies beyond Python 3.9+ standard library. No network calls and no inference.
 
-\`\`\`bash
+```bash
 python3 -m unittest discover -s skills/.experimental/pryntor-iclr-research-intake -p 'test_*.py' -v
 python3 skills/.experimental/pryntor-iclr-research-intake/research_index.py \
   --meta /approved/local/snapshot/meta.json \
   --papers /approved/local/snapshot/papers.json \
   --venture all --limit 5 --out /approved/reports/iclr2027-r0.json
-\`\`\`
+```
 
-Only metadata fields are processed: OpenReview note ID, number, title, keywords, area and status indices, tag indices. \`validate()\` fails on malformed rows, duplicate IDs, mismatched total/status partition, invalid link IDs and tag indices. \`select()\` applies deterministic lexical rules. Its score is a heuristic **search signal**, not scientific novelty, quality, relevance or deployability. All results are labelled \`screening_only\`. The output includes local SHA256 digests, declared snapshot version and a banner that prohibits product claims.
+Only metadata fields are processed: OpenReview note ID, number, title, keywords, area and status indices, tag indices. `validate()` fails on malformed rows, duplicate IDs, mismatched total/status partition, invalid link IDs and tag indices. `select()` applies deterministic lexical rules. Its score is a heuristic **search signal**, not scientific novelty, quality, relevance or deployability. All results are labelled `screening_only`. The output includes local SHA256 digests, declared snapshot version and a banner that prohibits product claims.
 
 ## Venture application
 - agents / R&D: reasoning, retrieval, agent-tool orchestration, evaluation. Keep PRY-199 experiment-integrity controls.
