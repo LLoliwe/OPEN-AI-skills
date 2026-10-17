@@ -20,3 +20,7 @@ When a task benefits from an interactive, physically grounded SVG, WebGL, or exp
 ## Optional Pryntor REA — lawful source analysis
 
 The Pryntor REA routing skill is registered project-locally for Codex at `.agents/skills/pryntor-rea/SKILL.md` and for Claude at `.claude/skills/pryntor-rea/SKILL.md`. It is **optional** and does not automatically install MCP on any host. Follow the central pinned security/permissions runbook and prove every persistent installation independently. Do not expose real REA tool calls publicly, send customer code to the fixture lab, or claim independent review. Physical AC operation is NOT APPLICABLE. Canonical status PRY-232 and opt-in customer preview at https://pryntor-inspect.onrender.com (browser-local heuristics only).
+
+## Pryntor Context Fabric — portable agent handoffs (FLEET-03 / PRY-84)
+
+Company-wide **policy adoption**, scoped per venture: read the project-local `.agents/skills/pryntor-context-vault/SKILL.md` (Codex) or `.claude/skills/pryntor-context-vault/SKILL.md` (Claude) when continuity/agent handoff is relevant. Generic vetted R0 reference: https://github.com/LLoliwe/Anthropic-skills/tree/main/skills/pryntor-context-vault. The company operating contract is held in the owned Pryntor Drive (not a public data feed), and the release ledger is https://linear.app/pryntor/issue/PRY-84. Never auto-import private records or treat Notion record flags as access control. A repo file is **not evidence of a running client installation, scheduled sync or cross-agent access**.
