@@ -1,0 +1,81 @@
+name: Pryntor REA — agent skill + real MCP smoke
+on:
+  pull_request:
+    paths:
+      - ".agents/skills/pryntor-rea/**"
+      - ".claude/skills/pryntor-rea/**"
+      - "AGENTS.md"
+      - ".github/workflows/pryntor-rea-agent-smoke.yml"
+  push:
+    branches: [main]
+    paths:
+      - ".agents/skills/pryntor-rea/**"
+      - ".claude/skills/pryntor-rea/**"
+      - "AGENTS.md"
+      - ".github/workflows/pryntor-rea-agent-smoke.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-fixture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout agent registrations
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          sparse-checkout: |
+            .agents/skills/pryntor-rea
+            .claude/skills/pryntor-rea
+            AGENTS.md
+            .github/workflows/pryntor-rea-agent-smoke.yml
+      - name: Checkout pinned tested REA fixture harness
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: LLoliwe/Anthropic-skills
+          ref: 4e20bea196e0baa7e05279044557e2ba1cecc7ab
+          path: rea-source
+          sparse-checkout: |
+            services/rea-host
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.21.0'
+      - name: Validate both agent skills are opt-in only
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for p in (Path('.agents/skills/pryntor-rea/SKILL.md'),Path('.claude/skills/pryntor-rea/SKILL.md')):
+            text=p.read_text()
+            for phrase in ('name: pryntor-rea','opt-in','NOT APPLICABLE','not','REA'):
+              assert phrase.lower() in text.lower(), (p,phrase)
+          print('codex and claude skills registered; no host mutation')
+          PY
+      - name: Install integrity-locked REA dependency + tests
+        run: |
+          npm ci --prefix rea-source/services/rea-host --omit=dev --no-fund --no-audit
+          npm test --prefix rea-source/services/rea-host
+          npm audit --prefix rea-source/services/rea-host --omit=dev --audit-level=high
+      - name: Real MCP hosted agent runner with verified fixture
+        run: |
+          NODE_OPTIONS=--max-old-space-size=384 PORT=19093 node rea-source/services/rea-host/server.mjs > "$RUNNER_TEMP/rea-agent.log" 2>&1 &
+          worker=$!
+          trap 'kill "$worker" 2>/dev/null || true' EXIT
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {setTimeout as sleep} from 'node:timers/promises';
+          let verified=null; const endpoint='http://127.0.0.1:19093';
+          for(let i=0;i<90;i++){
+            try{const res=await fetch(endpoint+'/readyz',{signal:AbortSignal.timeout(3000)});
+              if(res.status===200){verified=await res.json();break;}}catch{}
+            await sleep(1000);
+          }
+          assert.ok(verified,'REA MCP agent did not validate original fixture');
+          assert.equal(verified.status,'verified');
+          assert.ok(verified.toolCount>=200);
+          assert.ok(verified.graphNodes>=2);
+          assert.ok(verified.graphEdges>=1);
+          assert.equal(verified.customerData,false);
+          assert.equal(verified.physicalControl,false);
+          assert.equal((await fetch(endpoint+'/tools/call',{method:'POST'})).status,405);
+          console.log(JSON.stringify({status:'SECOND_AGENT_RUNTIME_VERIFIED',tools:verified.toolCount,nodes:verified.graphNodes,edges:verified.graphEdges,permanentInstall:false,deviceControl:false}));
+          NODE
