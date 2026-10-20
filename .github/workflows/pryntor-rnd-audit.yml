@@ -1,0 +1,22 @@
+name: Pryntor R&D experiment audit
+on:
+  pull_request:
+    paths:
+      - 'skills/.experimental/pryntor-experiment-integrity/**'
+      - '.github/workflows/pryntor-rnd-audit.yml'
+permissions:
+  contents: read
+jobs:
+  offline-integrity-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact PR revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Confirm Python version and run offline tests
+        run: |
+          python3 --version
+          cd skills/.experimental/pryntor-experiment-integrity
+          python3 -m unittest -v test_audit.py
